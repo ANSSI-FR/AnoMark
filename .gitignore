@@ -1,0 +1,7 @@
+.idea/
+__pycache__/
+data/*.csv
+data/*.txt
+models/*dump
+results/*.csv
+notebooks/.ipynb_checkpoints
