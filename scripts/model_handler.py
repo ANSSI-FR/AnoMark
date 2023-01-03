@@ -86,7 +86,7 @@ class MarkovModelHandler:
         grouped_cols = {col: lambda x: ' - '.join(np.unique([str(_) for _ in x]))
                         for col in df_cols}
         grouped_cols.update({score_col_name: min})
-        result_grouped = df[df[score_col_name] != np.log(model.prior)].groupby(col_name) \
+        result_grouped = df.groupby(col_name) \
             .agg(grouped_cols) \
             .reset_index().sort_values(score_col_name) \
             .rename({_: 'List of all ' + str(_) for _ in df_cols}, axis=1)
@@ -96,7 +96,7 @@ class MarkovModelHandler:
     @staticmethod
     def compute_threshold(model, percent):
         """
-        Returns the a percentage of model prior
+        Returns the percentage of model prior
         :param model: the MarkovModel model
         :param percent: percentage as a float (ex: 95 for 95%, and not 0.95)
         :return:
