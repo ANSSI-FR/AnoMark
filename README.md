@@ -91,7 +91,7 @@ With this code, you can build and execute models. It allows training data creati
 We consider that we start with a dataset in CSV format, containing a column with command line data, or with a TXT file
 with some text in it.
 
-*__N.B.:__ We will call in order the number of letters the model might consider in the n-grams construction for
+*__N.B.:__ We will use the term 'order' to refer to the number of letters the model might consider in the n-grams construction for
 the training part.*
 
 ### 1<sup>st</sup> option: Training from _CSV_ data
