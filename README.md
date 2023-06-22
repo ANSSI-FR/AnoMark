@@ -191,6 +191,4 @@ Instructions are detailed inside the notebooks.
 ## Presentations
 * [FRENCH] JUNIUS, Alexandre. ["AnoMark - Détection d’Anomalies dans des lignes de commande à l’aide de Chaînes de Markov."](https://www.sstic.org/2022/presentation/anomark_detection_anomalies_dans_des_lignes_de_commande_chaines_de_markov/)
 SSTIC 2022 (Symposium sur la sécurité des technologies de l'information et des communications).
-* [ENGLISH] JUNIUS, Alexandre. ["AnoMark - Anomaly Detection in Command Lines with Markov Chains"](https://www.first.org/conference/2023/program#pAnoMark-Anomaly-Detection-in-Command-Lines-with-Markov-Chains)
-FIRST 2023 (https://www.first.org/conference/2023/conference-overview)
-__N.B.:__ You need access to the conference to view the talk.
+* [ENGLISH] JUNIUS, Alexandre. ["Anomark - Anomaly Detection in Command Lines with Markov Chains"](https://www.first.org/conference/2023/program#pAnoMark-Anomaly-Detection-in-Command-Lines-with-Markov-Chains), 35th Annual FIRST conference, 2023.
