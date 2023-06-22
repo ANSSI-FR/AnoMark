@@ -6,7 +6,7 @@
 ## Motivation
 
 This algorithm is a Machine Learning one, using Natural Language Processing (NLP) techniques based on Markov Chains
-and n-grams. It offers a way to train a theoretical model on command line datasets considered clean. Once done it
+and n-grams. It offers a way to train a theoretical model on command lines datasets considered clean. Once done it
 can detect malicious command lines on other datasets.
 
 ## Technologies used
@@ -88,7 +88,7 @@ With this code, you can build and execute models. It allows training data creati
 
 ### Prerequisites
 
-We consider that we start with a dataset in CSV format, containing a column with command line data, or with a TXT file
+We consider that we start with a dataset in CSV format, containing a column with command lines data, or with a TXT file
 with some text in it.
 
 *__N.B.:__ We will use the term 'order' to refer to the number of letters the model might consider in the n-grams construction for
@@ -189,6 +189,5 @@ Anaconda suite.
 Instructions are detailed inside the notebooks.
 
 ## Presentations
-* [FRENCH] JUNIUS, Alexandre. ["AnoMark - Détection d’Anomalies dans des lignes de commande à l’aide de Chaînes de Markov."](https://www.sstic.org/2022/presentation/anomark_detection_anomalies_dans_des_lignes_de_commande_chaines_de_markov/)
-SSTIC 2022 (Symposium sur la sécurité des technologies de l'information et des communications).
+* [FRENCH] JUNIUS, Alexandre. ["AnoMark - Détection d’Anomalies dans des lignes de commande à l’aide de Chaînes de Markov."](https://www.sstic.org/2022/presentation/anomark_detection_anomalies_dans_des_lignes_de_commande_chaines_de_markov/), SSTIC 2022 (Symposium sur la sécurité des technologies de l'information et des communications).
 * [ENGLISH] JUNIUS, Alexandre. ["Anomark - Anomaly Detection in Command Lines with Markov Chains"](https://www.first.org/conference/2023/program#pAnoMark-Anomaly-Detection-in-Command-Lines-with-Markov-Chains), 35th Annual FIRST conference, 2023.
