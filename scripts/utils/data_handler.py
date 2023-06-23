@@ -1,5 +1,6 @@
-import re
 import random
+import re
+
 import pandas as pd
 
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -7,17 +8,17 @@ pd.options.mode.chained_assignment = None  # default='warn'
 
 def replace_sid_in_str(some_string, placeholder="<SID>"):
     regex = r"S[-–]1[-–]([0-9]+[-–])+[0-9]+"
-    return re.sub(regex, placeholder, some_string, 0, re.MULTILINE & re.IGNORECASE)
+    return re.sub(regex, placeholder, some_string, 0, flags=re.MULTILINE | re.IGNORECASE)
 
 
 def replace_guid_in_str(some_string, placeholder="<GUID>"):
     regex = r"\{?[0-9A-Fa-f]{8}[-–]([0-9A-Fa-f]{4}[-–]){3}[0-9A-Fa-f]{12}\}?"
-    return re.sub(regex, placeholder, some_string, 0, re.MULTILINE & re.IGNORECASE)
+    return re.sub(regex, placeholder, some_string, 0, flags=re.MULTILINE | re.IGNORECASE)
 
 
 def replace_user_in_str(some_string, placeholder="<USER>"):
-    regex = r'C:\\Users\\[^\\]*\\'
-    return re.sub(regex, r"C:\\Users\\{}\\".format(placeholder), some_string, re.MULTILINE & re.IGNORECASE)
+    regex = r'(C:\\Users)\\[^\\]*\\'
+    return re.sub(regex, r"\g<1>\\{}\\".format(placeholder), some_string, flags=re.MULTILINE | re.IGNORECASE)
 
 
 def apply_modules_to_str(text):
