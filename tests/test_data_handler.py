@@ -2,12 +2,7 @@ from unittest import TestCase
 
 import pandas as pd
 
-from scripts.utils.data_handler import (
-    replace_sid_in_str,
-    replace_guid_in_str,
-    replace_user_in_str,
-    process_dataframe
-)
+from scripts.utils.data_handler import process_dataframe, replace_guid_in_str, replace_sid_in_str, replace_user_in_str
 
 
 class Test(TestCase):
@@ -41,9 +36,15 @@ class Test(TestCase):
         res3 = replace_user_in_str(some_string=str3, placeholder="<OTHER_PLACEDHOLDER>")
         expected_res3 = r"C:\Users\<OTHER_PLACEDHOLDER>\some_folder"
 
+        # Lowercase path test
+        str4 = r"c:\users\some_user\some_folder"
+        res4 = replace_user_in_str(some_string=str4)
+        expected_res4 = r"c:\users\<USER>\some_folder"
+
         self.assertEqual(expected_res1, res1)
         self.assertEqual(expected_res2, res2)
         self.assertEqual(expected_res3, res3)
+        self.assertEqual(expected_res4, res4)
 
     def test_replace_guid_in_str(self):
         str1 = r"Here is some {12345678-1234-1234-1234-123456789012}"
