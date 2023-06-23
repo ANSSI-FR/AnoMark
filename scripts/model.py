@@ -1,5 +1,5 @@
-from random import choice, random
 from math import log
+from random import choice, random
 
 
 def normalize_transition_matrix(matrix: dict):
