@@ -14,12 +14,14 @@ from scripts.utils.data_handler import apply_modules_to_df
 
 tqdm.pandas()
 
+MARKOV_SCORE = "markovScore"
+
 
 class MarkovModelHandler:
 
     @staticmethod
     def run(model_path, data_path, store_bool, col_name, nb_lines=50, color_output=False,
-            score_col_name="markovScore", verbose=True, apply_placeholder=False):
+            score_col_name=MARKOV_SCORE, verbose=True, apply_placeholder=False):
 
         with open(model_path, "rb") as f:
             model: MarkovModel = pickle.load(f)
@@ -76,7 +78,7 @@ class MarkovModelHandler:
         return res
 
     @staticmethod
-    def execute_on_df(df: pd.DataFrame, model: MarkovModel, col_name, score_col_name="markovScore"):
+    def execute_on_df(df: pd.DataFrame, model: MarkovModel, col_name, score_col_name=MARKOV_SCORE):
         print("Applying model to dataframe")
 
         def apply_likelihood(col):
@@ -109,12 +111,20 @@ class MarkovModelHandler:
     def display_top(df: pd.DataFrame, model: MarkovModel, col_name, threshold, nb_lines, color):
         print('_______')
         print("Displaying top {}".format(nb_lines))
-        for elt in list(df[col_name][:nb_lines]):
+        df_slice_map = df[[col_name, MARKOV_SCORE]][:nb_lines].to_dict()
+        commands = df_slice_map[col_name]
+        scores = df_slice_map[MARKOV_SCORE]
+
+        for item, elt in commands.items():
             print('_______')
             if color:
                 print(MarkovModelHandler.colored_results(elt, model, threshold))
             else:
                 print(elt)
+
+            # Human-readable percentage to reflect proximity of Markov score to threshold where threshold is the
+            # "expected" value.
+            print(str(round((1 - (scores[item] / threshold)) * 100, 2)) + "%")
         print('_______')
 
     @staticmethod
