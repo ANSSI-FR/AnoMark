@@ -1,15 +1,15 @@
 import datetime
-import sys
 import pickle
+import sys
+import time
+
+import numpy as np
 import pandas as pd
 from pandas.errors import ParserError
-import numpy as np
-import time
 from tqdm import tqdm
 
 # custom script for Markov Chains model
 from scripts.model import MarkovModel
-
 from scripts.utils.data_handler import apply_modules_to_df
 
 tqdm.pandas()
@@ -28,6 +28,7 @@ class MarkovModelHandler:
         df[col_name] = df[col_name].astype(str)
 
         if apply_placeholder:
+            print("Applying placeholder transformation...")
             df = apply_modules_to_df(df, col_name)
 
         result_grouped = MarkovModelHandler.execute_on_df(df, model, col_name, score_col_name)
