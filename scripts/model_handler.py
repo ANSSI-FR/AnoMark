@@ -18,7 +18,7 @@ tqdm.pandas()
 class MarkovModelHandler:
 
     @staticmethod
-    def run(model_path, data_path, store_bool, col_name, nb_lines=50, color_output=True,
+    def run(model_path, data_path, store_bool, col_name, nb_lines=50, color_output=False,
             score_col_name="markovScore", verbose=True, apply_placeholder=False):
 
         with open(model_path, "rb") as f:
@@ -36,7 +36,8 @@ class MarkovModelHandler:
 
         # Storing the results in a file if requested
         if store_bool:
-            result_grouped = MarkovModelHandler.add_color_column(result_grouped, model, threshold, col_name)
+            if color_output:
+                result_grouped = MarkovModelHandler.add_color_column(result_grouped, model, threshold, col_name)
             MarkovModelHandler.save_execution_results(result_grouped)
 
         # Displaying results in the terminal
