@@ -41,10 +41,16 @@ class Test(TestCase):
         res4 = replace_user_in_str(some_string=str4)
         expected_res4 = r"c:\users\<USER>\some_folder"
 
+        # Multiple user placeholders in one line
+        str5 = r"c:\users\some_user\some_folder\some_file.exe c:\users\some_user\some_folder\some_file.txt"
+        res5 = replace_user_in_str(some_string=str5)
+        expected_res5 = r"c:\users\<USER>\some_folder\some_file.exe c:\users\<USER>\some_folder\some_file.txt"
+
         self.assertEqual(expected_res1, res1)
         self.assertEqual(expected_res2, res2)
         self.assertEqual(expected_res3, res3)
         self.assertEqual(expected_res4, res4)
+        self.assertEqual(expected_res5, res5)
 
     def test_replace_guid_in_str(self):
         str1 = r"Here is some {12345678-1234-1234-1234-123456789012}"
