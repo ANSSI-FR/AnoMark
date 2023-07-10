@@ -20,7 +20,7 @@ MARKOV_SCORE = "markovScore"
 class MarkovModelHandler:
 
     @staticmethod
-    def run(model_path, data_path, store_bool, col_name, nb_lines=50, color_output=False,
+    def run(model_path, data_path, col_name, store_bool=False, output="", nb_lines=50, color_output=False,
             score_col_name=MARKOV_SCORE, verbose=True, apply_placeholder=False):
 
         with open(model_path, "rb") as f:
@@ -37,10 +37,10 @@ class MarkovModelHandler:
         threshold = MarkovModelHandler.compute_threshold(model, percent=95)
 
         # Storing the results in a file if requested
-        if store_bool:
+        if store_bool or output:
             if color_output:
                 result_grouped = MarkovModelHandler.add_color_column(result_grouped, model, threshold, col_name)
-            MarkovModelHandler.save_execution_results(result_grouped)
+            MarkovModelHandler.save_execution_results(result_grouped, output)
 
         # Displaying results in the terminal
         if verbose:
@@ -136,10 +136,13 @@ class MarkovModelHandler:
         return df
 
     @staticmethod
-    def save_execution_results(df: pd.DataFrame):
+    def save_execution_results(df: pd.DataFrame, output: str = ""):
         print("Saving results...")
         now = datetime.datetime.fromtimestamp(time.time())
-        output_path = sys.path[0] + '/results/' + now.strftime("%Y%m%d_%Hh%M_") + 'export.csv'
+        if output:
+            output_path = output
+        else:
+            output_path = sys.path[0] + '/results/' + now.strftime("%Y%m%d_%Hh%M_") + 'export.csv'
         # save the model to disk
         df.to_csv(output_path, index=False)
         print("Successfully saved results in: {}".format(output_path))
