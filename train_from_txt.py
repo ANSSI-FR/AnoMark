@@ -1,8 +1,8 @@
 import argparse
 import pickle
 
-from scripts.utils.data_handler import apply_modules_to_str
-from scripts.model_handler import MarkovModelHandler as mmh
+from anomark.model_handler import MarkovModelHandler as mmh
+from anomark.utils.data_handler import apply_modules_to_str
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

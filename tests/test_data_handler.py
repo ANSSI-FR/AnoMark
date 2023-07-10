@@ -1,8 +1,7 @@
 from unittest import TestCase
 
 import pandas as pd
-
-from scripts.utils.data_handler import process_dataframe, replace_guid_in_str, replace_sid_in_str, replace_user_in_str
+from anomark.utils.data_handler import process_dataframe, replace_guid_in_str, replace_sid_in_str, replace_user_in_str
 
 
 class Test(TestCase):

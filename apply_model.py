@@ -1,6 +1,7 @@
 import argparse
-from scripts.model_handler import MarkovModelHandler as mmh
-from scripts.utils.data_handler import process_dataframe
+
+from anomark.model_handler import MarkovModelHandler as mmh
+from anomark.utils.data_handler import process_dataframe
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

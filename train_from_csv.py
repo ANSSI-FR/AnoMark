@@ -1,8 +1,8 @@
 import argparse
 import pickle
 
-from scripts.utils.data_handler import process_dataframe
-from scripts.model_handler import MarkovModelHandler as mmh
+from anomark.model_handler import MarkovModelHandler as mmh
+from anomark.utils.data_handler import process_dataframe
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     data = mmh.load_data(path=args.data, col_name=args.column)
     data = process_dataframe(data=data, column=args.column, n_lines=args.nLines, percentage=args.percentage,
                              from_end=args.fromEnd, randomize=args.randomize, apply_placeholder=args.placeholder)
-                             
+
     print("Training on data...")
 
     if args.resume:
