@@ -21,7 +21,7 @@ class MarkovModelHandler:
 
     @staticmethod
     def run(model_path, data_path, col_name, store_bool=False, output="", nb_lines=50, color_output=False,
-            score_col_name=MARKOV_SCORE, verbose=True, apply_placeholder=False):
+            score_col_name=MARKOV_SCORE, verbose=True, apply_placeholder=False, show_percentage=False):
 
         with open(model_path, "rb") as f:
             model: MarkovModel = pickle.load(f)
@@ -40,11 +40,15 @@ class MarkovModelHandler:
         if store_bool or output:
             if color_output:
                 result_grouped = MarkovModelHandler.add_color_column(result_grouped, model, threshold, col_name)
+
+            if show_percentage:
+                result_grouped = MarkovModelHandler.add_percentage_column(result_grouped, threshold, MARKOV_SCORE)
+
             MarkovModelHandler.save_execution_results(result_grouped, output)
 
         # Displaying results in the terminal
         if verbose:
-            MarkovModelHandler.display_top(result_grouped, model, col_name, threshold, nb_lines, color_output)
+            MarkovModelHandler.display_top(result_grouped, model, col_name, threshold, nb_lines, color_output, show_percentage)
         return result_grouped
 
     @staticmethod
@@ -108,7 +112,7 @@ class MarkovModelHandler:
         return np.log(model.prior) * percent / 100
 
     @staticmethod
-    def display_top(df: pd.DataFrame, model: MarkovModel, col_name, threshold, nb_lines, color):
+    def display_top(df: pd.DataFrame, model: MarkovModel, col_name, threshold, nb_lines, color, show_percentage):
         print('_______')
         print("Displaying top {}".format(nb_lines))
         df_slice_map = df[[col_name, MARKOV_SCORE]][:nb_lines].to_dict()
@@ -122,9 +126,10 @@ class MarkovModelHandler:
             else:
                 print(elt)
 
-            # Human-readable percentage to reflect proximity of Markov score to threshold where threshold is the
-            # "expected" value.
-            print(str(round((1 - (scores[item] / threshold)) * 100, 2)) + "%")
+            if show_percentage:
+                # Human-readable percentage to reflect proximity of Markov score to threshold where threshold is the
+                # "expected" value.
+                print(str(round((1 - (scores[item] / threshold)) * 100, 2)) + "%")
         print('_______')
 
     @staticmethod
@@ -133,6 +138,14 @@ class MarkovModelHandler:
         # Adding a column with color in results
         df["Colored {}".format(col_name)] = df[col_name] \
             .progress_apply(lambda x: MarkovModelHandler.colored_results(x, model, threshold))
+        return df
+
+    @staticmethod
+    def add_percentage_column(df: pd.DataFrame, threshold: float, col_name):
+        print("Adding percentage column")
+        # Adding a column with percentage in results
+        df["Percentage"] = df[col_name] \
+            .progress_apply(lambda x: str(round((1 - (x / threshold)) * 100, 2)) + "%")
         return df
 
     @staticmethod

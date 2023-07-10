@@ -23,6 +23,8 @@ if __name__ == "__main__":
     parser.add_argument("--placeholder", required=False, action="store_true",
                         help="Apply GUID, SID, and username replacement by placeholder. See documentation for more "
                              "details about how it is performed")
+    parser.add_argument("--show-percentage", required=False, action="store_true",
+                        help="Add human-readable percentage to reflect proximity of Markov score to threshold where threshold is the expected value.")
 
     args = parser.parse_args()
 
@@ -36,5 +38,6 @@ if __name__ == "__main__":
 
     mmh.run(
         model_path=args.model, data_path=args.data, col_name=args.column, store_bool=args.store, output=args.output,
-        nb_lines=args.nLines, color_output=args.color, verbose=not args.silent, apply_placeholder=args.placeholder
+        nb_lines=args.nLines, color_output=args.color, verbose=not args.silent, apply_placeholder=args.placeholder,
+        show_percentage=args.show_percentage
     )
