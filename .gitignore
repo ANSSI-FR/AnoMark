@@ -1,7 +1,8 @@
 .idea/
 __pycache__/
-data/*.csv
-data/*.txt
-models/*dump
+data/*
+data/*
+models/*
 results/*.csv
 notebooks/.ipynb_checkpoints
+*.egg-info/
