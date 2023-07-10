@@ -1,8 +1,7 @@
 from unittest import TestCase
 
 import pandas as pd
-
-from scripts.model_handler import MarkovModelHandler as mmh
+from anomark.model_handler import MarkovModelHandler as mmh
 
 
 class Test(TestCase):
