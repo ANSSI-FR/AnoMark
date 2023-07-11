@@ -1,7 +1,13 @@
 from unittest import TestCase
 
 import pandas as pd
-from anomark.utils.data_handler import process_dataframe, replace_guid_in_str, replace_sid_in_str, replace_user_in_str
+from anomark.utils.data_handler import (
+    process_dataframe,
+    replace_guid_in_str,
+    replace_hash_in_str,
+    replace_sid_in_str,
+    replace_user_in_str,
+)
 
 
 class Test(TestCase):
@@ -67,6 +73,42 @@ class Test(TestCase):
         self.assertEqual(expected_res1, res1)
         self.assertEqual(expected_res2, res2)
         self.assertEqual(expected_res3, res3)
+
+    def test_replace_hash_in_str(self):
+        # SHA256
+        str1 = r"Here is some e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        res1 = replace_hash_in_str(some_string=str1)
+        expected_res1 = r"Here is some <HASH>"
+
+        # SHA1
+        str2 = r"Here is some da39a3ee5e6b4b0d3255bfef95601890afd80709"
+        res2 = replace_hash_in_str(some_string=str2)
+        expected_res2 = r"Here is some <HASH>"
+
+        # MD5
+        str3 = r"Here is some d41d8cd98f00b204e9800998ecf8427e"
+        res3 = replace_hash_in_str(some_string=str3)
+        expected_res3 = r"Here is some <HASH>"
+
+        str4 = r"Other e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 here"
+        res4 = replace_hash_in_str(some_string=str4, placeholder="placeholder")
+        expected_res4 = "Other placeholder here"
+
+        str5 = r"Not a hash: d41d8cd98f00b204e9800998ecf84"
+        res5 = replace_hash_in_str(some_string=str5)
+        expected_res5 = str5
+
+        # Multiple SHA256 placeholders in one line
+        str6 = r"c:\users\some_user\some_folder\e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.exe c:\users\some_user\some_folder\e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt"
+        res6 = replace_hash_in_str(some_string=str6)
+        expected_res6 = r"c:\users\some_user\some_folder\<HASH>.exe c:\users\some_user\some_folder\<HASH>.txt"
+
+        self.assertEqual(expected_res1, res1)
+        self.assertEqual(expected_res2, res2)
+        self.assertEqual(expected_res3, res3)
+        self.assertEqual(expected_res4, res4)
+        self.assertEqual(expected_res5, res5)
+        self.assertEqual(expected_res6, res6)
 
     def test_process_dataframe(self):
         df = pd.DataFrame({"col1": ["Data", "Some SID: {12345678-1234-1234-1234-123456789012}",
