@@ -90,18 +90,23 @@ class Test(TestCase):
         res3 = replace_hash_in_str(some_string=str3)
         expected_res3 = r"Here is some <HASH>"
 
-        str4 = r"Other e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 here"
-        res4 = replace_hash_in_str(some_string=str4, placeholder="placeholder")
-        expected_res4 = "Other placeholder here"
+        # Common truncation of hash in file name
+        str4 = r"Here is some d41d8cd98f00b204e980"
+        res4 = replace_hash_in_str(some_string=str4)
+        expected_res4 = r"Here is some <HASH>"
 
-        str5 = r"Not a hash: d41d8cd98f00b204e9800998ecf84"
-        res5 = replace_hash_in_str(some_string=str5)
-        expected_res5 = str5
+        str5 = r"Other e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 here"
+        res5 = replace_hash_in_str(some_string=str5, placeholder="placeholder")
+        expected_res5 = "Other placeholder here"
+
+        str6 = r"Not a hash: d41d8cd98f00b204e9800998ecf84"
+        res6 = replace_hash_in_str(some_string=str6)
+        expected_res6 = str6
 
         # Multiple SHA256 placeholders in one line
-        str6 = r"c:\users\some_user\some_folder\e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.exe c:\users\some_user\some_folder\e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt"
-        res6 = replace_hash_in_str(some_string=str6)
-        expected_res6 = r"c:\users\some_user\some_folder\<HASH>.exe c:\users\some_user\some_folder\<HASH>.txt"
+        str7 = r"c:\users\some_user\some_folder\e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.exe c:\users\some_user\some_folder\e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt"
+        res7 = replace_hash_in_str(some_string=str7)
+        expected_res7 = r"c:\users\some_user\some_folder\<HASH>.exe c:\users\some_user\some_folder\<HASH>.txt"
 
         self.assertEqual(expected_res1, res1)
         self.assertEqual(expected_res2, res2)
@@ -109,6 +114,7 @@ class Test(TestCase):
         self.assertEqual(expected_res4, res4)
         self.assertEqual(expected_res5, res5)
         self.assertEqual(expected_res6, res6)
+        self.assertEqual(expected_res7, res7)
 
     def test_process_dataframe(self):
         df = pd.DataFrame({"col1": ["Data", "Some SID: {12345678-1234-1234-1234-123456789012}",
