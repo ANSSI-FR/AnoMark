@@ -22,8 +22,8 @@ def replace_user_in_str(some_string, placeholder="<USER>"):
 
 
 def replace_hash_in_str(some_string, placeholder="<HASH>"):
-    # regex consists of SHA256, SHA1, MD5
-    regex = r'\b(?:[A-Fa-f0-9]{64}|[A-Fa-f0-9]{40}|[A-Fa-f0-9]{32})\b'
+    # regex consists of SHA256, SHA1, MD5, common truncation of hash in file name
+    regex = r'\b(?:[A-Fa-f0-9]{64}|[A-Fa-f0-9]{40}|[A-Fa-f0-9]{32}|[A-Fa-f0-9]{20})\b'
     return re.sub(regex, placeholder, some_string, flags=re.MULTILINE | re.IGNORECASE)
 
 
