@@ -21,13 +21,19 @@ def replace_user_in_str(some_string, placeholder="<USER>"):
     return re.sub(regex, r"\g<1>\\{}\\".format(placeholder), some_string, flags=re.MULTILINE | re.IGNORECASE)
 
 
+def replace_hash_in_str(some_string, placeholder="<HASH>"):
+    # regex consists of SHA256, SHA1, MD5
+    regex = r'\b(?:[A-Fa-f0-9]{64}|[A-Fa-f0-9]{40}|[A-Fa-f0-9]{32})\b'
+    return re.sub(regex, placeholder, some_string, flags=re.MULTILINE | re.IGNORECASE)
+
+
 def apply_modules_to_str(text):
     """
     Apply all modules to df column.
     :param text: String to apply modules
     :return: dataframe with placeholders
     """
-    return replace_user_in_str(replace_sid_in_str(replace_guid_in_str(text)))
+    return replace_user_in_str(replace_sid_in_str(replace_guid_in_str(replace_hash_in_str(text))))
 
 
 def apply_modules_to_pd_series(pd_series):
