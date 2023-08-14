@@ -26,8 +26,11 @@ if __name__ == "__main__":
     parser.add_argument("-r", "--randomize", required=False, action="store_true",
                         help="Randomize selection for line selection")
     parser.add_argument("--placeholder", action="store_true", required=False,
-                        help="Apply GUID, SID, and username replacement by placeholder. See documentation for more "
+                        help="Apply GUID, SID, username, and hash replacement by placeholder. See documentation for more "
                              "details about how it is performed")
+    parser.add_argument("--filepath-placeholder", action="store_true", required=False,
+                        help="Apply filepath replacement by placeholder. See documentation for more "
+                             "details about how it is performed. This is a separate because you may want other placeholders applied but not this one.")
 
     parser.add_argument("--resume", action="store_true", help="Continue training mode for the model")
     parser.add_argument("-m", "--model", help="Path to the model to use (resume training mode)")
@@ -36,7 +39,7 @@ if __name__ == "__main__":
 
     data = mmh.load_data(path=args.data, col_name=args.column)
     data = process_dataframe(data=data, column=args.column, n_lines=args.nLines, percentage=args.percentage,
-                             from_end=args.fromEnd, randomize=args.randomize, apply_placeholder=args.placeholder)
+                             from_end=args.fromEnd, randomize=args.randomize, apply_placeholder=args.placeholder, apply_filepath_placeholder=args.filepath_placeholder)
 
     print("Training on data...")
 

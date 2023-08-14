@@ -21,7 +21,8 @@ class MarkovModelHandler:
 
     @staticmethod
     def run(model_path, data_path, col_name, store_bool=False, output="", nb_lines=50, color_output=False,
-            score_col_name=MARKOV_SCORE, verbose=True, apply_placeholder=False, show_percentage=False):
+            score_col_name=MARKOV_SCORE, verbose=True, apply_placeholder=False, show_percentage=False,
+            apply_filepath_placeholder=False):
 
         with open(model_path, "rb") as f:
             model: MarkovModel = pickle.load(f)
@@ -31,7 +32,7 @@ class MarkovModelHandler:
 
         if apply_placeholder:
             print("Applying placeholder transformation...")
-            df = apply_modules_to_df(df, col_name)
+            df = apply_modules_to_df(df, col_name, apply_filepath_placeholder)
 
         result_grouped = MarkovModelHandler.execute_on_df(df, model, col_name, score_col_name)
         threshold = MarkovModelHandler.compute_threshold(model, percent=95)

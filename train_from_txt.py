@@ -15,8 +15,11 @@ if __name__ == "__main__":
     parser.add_argument("--output", required=False,
                         help="The path of the output for the new model")
     parser.add_argument("--placeholder", action="store_true", required=False,
-                        help="Apply GUID, SID, and username replacement by placeholder. See documentation for more "
+                        help="Apply GUID, SID, username, and hash replacement by placeholder. See documentation for more "
                              "details about how it is performed")
+    parser.add_argument("--filepath-placeholder", action="store_true", required=False,
+                        help="Apply filepath replacement by placeholder. See documentation for more "
+                             "details about how it is performed. This is a separate because you may want other placeholders applied but not this one.")
 
     parser.add_argument("--resume", action="store_true", help="Continue training mode for the model")
     parser.add_argument("-m", "--model", help="Path to the model to use (continue training mode)")
@@ -30,7 +33,7 @@ if __name__ == "__main__":
 
     if args.placeholder:
         print("Applying placeholder transformation...")
-        data = apply_modules_to_str(text=data)
+        data = apply_modules_to_str(text=data, apply_filepath_placeholder=args.filepath_placeholder)
 
     if args.resume:
         if args.model is None:
