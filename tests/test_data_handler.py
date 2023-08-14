@@ -3,6 +3,7 @@ from unittest import TestCase
 import pandas as pd
 from anomark.utils.data_handler import (
     process_dataframe,
+    replace_filepath_in_str,
     replace_guid_in_str,
     replace_hash_in_str,
     replace_sid_in_str,
@@ -116,6 +117,38 @@ class Test(TestCase):
         self.assertEqual(expected_res6, res6)
         self.assertEqual(expected_res7, res7)
 
+    def test_replace_filepath_in_str(self):
+        # Standard file path
+        str1 = r"C:\Users\user\AppData\Local\Thing\Here\Update.exe"
+        res1 = replace_filepath_in_str(some_string=str1)
+        expected_res1 = r"C:\<FILEPATH>"
+
+        # Standard command line
+        str2 = r'"C:\Program Files (x86)\Microsoft Office\Office14\POWERPNT.EXE" /S "C:\Users\user\AppData\Local\Temp\A powerpoint with a bunch of spaces 2023.ppt"'
+        res2 = replace_filepath_in_str(some_string=str2)
+        expected_res2 = r'"C:\<FILEPATH>" /S "C:\<FILEPATH>"'
+
+        # Standard file path with a trailing space
+        str3 = r"\"C:\Users\user\AppData\Local\Temp\file_name_123456.exe\" "
+        res3 = replace_filepath_in_str(some_string=str3)
+        expected_res3 = r"\"C:\<FILEPATH>\" "
+
+        # Standard path with integer command line argument
+        str4 = r"C:\WINDOWS\splwow64.exe 123456"
+        res4 = replace_filepath_in_str(some_string=str4)
+        expected_res4 = r"C:\<FILEPATH> 123456"
+
+        # Relative path
+        str5 = r"relative\path\here.exe"
+        res5 = replace_filepath_in_str(some_string=str5)
+        expected_res5 = r"relative\path\here.exe"
+
+        self.assertEqual(expected_res1, res1)
+        self.assertEqual(expected_res2, res2)
+        self.assertEqual(expected_res3, res3)
+        self.assertEqual(expected_res4, res4)
+        self.assertEqual(expected_res5, res5)
+
     def test_process_dataframe(self):
         df = pd.DataFrame({"col1": ["Data", "Some SID: {12345678-1234-1234-1234-123456789012}",
                                     "Other line", r"Some process path C:\Users\some_user\some_folder"],
@@ -137,6 +170,12 @@ class Test(TestCase):
         expected_res3 = pd.DataFrame({'col1': ["Other line", r"Some process path C:\Users\<USER>\some_folder"],
                                       "col2": [2, 10]})
 
+        res4 = process_dataframe(df.copy(), column="col1", n_lines=None, percentage=50, from_end=True,
+                                 randomize=False, apply_placeholder=True, apply_filepath_placeholder=True).reset_index(drop=True)
+        expected_res4 = pd.DataFrame({'col1': ["Other line", r"Some process path C:\<FILEPATH>"],
+                                      "col2": [2, 10]})
+
         self.assertEqual(expected_res1.to_dict(), res1.to_dict())
         self.assertEqual(expected_res2.to_dict(), res2.to_dict())
         self.assertEqual(expected_res3.to_dict(), res3.to_dict())
+        self.assertEqual(expected_res4.to_dict(), res4.to_dict())

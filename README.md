@@ -66,7 +66,7 @@ anomark/
    └── Browse_results.ipynb
 ├── results/
     └── <i>some_result.csv</i>
-├── scripts/
+├── anomark/
    ├── model_handler.py
    ├── model.py
    └── utils/
@@ -139,19 +139,34 @@ model and resume training. To specify the path of the existing model you use the
 
 ### Placeholder flag
 
-You can use the `--placeholder` flag if you want to train a model without considering the GUID, SID, and
-usernames. In the three cases, we replace them with a placeholder after a detection using the following regular
+You can use the `--placeholder` flag if you want to train a model without considering the GUID, SID,
+usernames, and hashes. In the four cases, we replace them with a placeholder after a detection using the following regular
 expressions:
 
 
-| Module | Regex                                                      | Placeholder |
-|--------|------------------------------------------------------------|-------------|
- | GUID   | `\{?[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}\}?` | `<GUID>`    |
- | SID    | `S-1–([0-9]+-)+[0-9]+`                                     | `<SID>`     |
- | User   | `C:\\Users\\[^\\]*\\`                                      | `<USER>`    |
+| Module | Regex                                                             | Placeholder |
+|--------|-------------------------------------------------------------------|-------------|
+| GUID   | `\{?[0-9A-Fa-f]{8}[-–]([0-9A-Fa-f]{4}[-–]){3}[0-9A-Fa-f]{12}\}?` | `<GUID>`    |
+| SID    | `S[-–]1[-–]([0-9]+[-–])+[0-9]+`                                  | `<SID>`     |
+| User   | `(C:\\Users)\\[^\\]*\\`                                          | `<USER>`    |
+| Hash   | `\b(?:[A-Fa-f0-9]{64}\|[A-Fa-f0-9]{40}\|[A-Fa-f0-9]{32}\|[A-Fa-f0-9]{20})\b`| `<HASH>`    |
 
 It is a useful flag for reducing the number of false positives. You can edit the regular expressions in
-the `scripts/utils/data_handler.py` file.
+the `anomark/utils/data_handler.py` file.
+
+
+### Filepath Placeholder flag
+
+You can use the `--filepath-placeholder` flag if you want to train a model without considering the filepath. We replace the filepath with a placeholder after a detection using the following regular
+expressions:
+
+
+| Module | Regex                                                             | Placeholder |
+|--------|-------------------------------------------------------------------|-------------|
+ | Filepath   | `(?P<opening>\b(?P<montage>[a-zA-Z]:[\/\\])\|[\/\\][\/\\](?<!http:\/\/)(?<!https:\/\/)(?:>[?.][\/\\](?:[^\/\\<>:\"\|?\n\r ]+[\/\\])?(?P=montage)?\|(?!(?P=montage)))\|%\w+%[\/\\]?)(?:[^\/\\<>:\"\|?\n\r ,'][^\/\\<>:\"\|?\n\r]*(?<![ ,'])[\/\\])*(?:(?=[^\/\\<>:\"'\|?\n\r;, ])(?:(?:[^\/\\<>:\"\|?\n\r;, .](?: (?=[\w\-]))?(?:\*(?!= ))?(?!(?P=montage)))+)?(?:\.\w+)*)\|(?:'(?P=opening)(?=.*'\W\|.*'$)(?:[^\/\\<>:'\"\|?\n\r]+(?:'(?=\w))?[\/\\]?)*')\|\"(?P=opening)(?=.*\")(?:[^\/\\<>:\"\|?\n\r]+[\/\\]?)*\"` | `<FILEPATH>`    |
+
+It is a useful flag for reducing the number of false positives **BUT CAN HAVE CONSEQUENCES REGARDING TRUE POSITIVES**. I recommend that you only use this flag if you are dealing with a dataset consisting of command lines from many users who have varied setups and run pretty much any file from any directory under the sun. You can edit the regular expression in
+the `anomark/utils/data_handler.py` file.
 
 ## Usage: Execution of a model on a dataset
 

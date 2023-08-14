@@ -27,38 +27,52 @@ def replace_hash_in_str(some_string, placeholder="<HASH>"):
     return re.sub(regex, placeholder, some_string, flags=re.MULTILINE | re.IGNORECASE)
 
 
-def apply_modules_to_str(text):
+# This applies to Windows file paths
+def replace_filepath_in_str(some_string, placeholder="<FILEPATH>"):
+    # From https://regex101.com/r/zWGLMP/25, adapted to Python
+    # We need to cover NTFS standard: https://learn.microsoft.com/en-ca/windows/win32/fileio/naming-a-file?redirectedfrom=MSDN
+    regex = r"(?P<opening>\b(?P<montage>[a-zA-Z]:[\/\\])|[\/\\][\/\\](?<!http:\/\/)(?<!https:\/\/)(?:>[?.][\/\\](?:[^\/\\<>:\"|?\n\r ]+[\/\\])?(?P=montage)?|(?!(?P=montage)))|%\w+%[\/\\]?)(?:[^\/\\<>:\"|?\n\r ,'][^\/\\<>:\"|?\n\r]*(?<![ ,'])[\/\\])*(?:(?=[^\/\\<>:\"'|?\n\r;, ])(?:(?:[^\/\\<>:\"|?\n\r;, .](?: (?=[\w\-]))?(?:\*(?!= ))?(?!(?P=montage)))+)?(?:\.\w+)*)|(?:'(?P=opening)(?=.*'\W|.*'$)(?:[^\/\\<>:'\"|?\n\r]+(?:'(?=\w))?[\/\\]?)*')|\"(?P=opening)(?=.*\")(?:[^\/\\<>:\"|?\n\r]+[\/\\]?)*\""
+    return re.sub(regex, r"\g<1>{}".format(placeholder), some_string, flags=re.MULTILINE | re.IGNORECASE)
+
+
+def apply_modules_to_str(text, apply_filepath_placeholder=False):
     """
     Apply all modules to df column.
     :param text: String to apply modules
+    :param apply_filepath_placeholder: Flag indicating if we want to apply the filepath placeholder
     :return: dataframe with placeholders
     """
-    return replace_user_in_str(replace_sid_in_str(replace_guid_in_str(replace_hash_in_str(text))))
+    if apply_filepath_placeholder:
+        return replace_user_in_str(replace_sid_in_str(replace_guid_in_str(replace_hash_in_str(replace_filepath_in_str(text)))))
+    else:
+        return replace_user_in_str(replace_sid_in_str(replace_guid_in_str(replace_hash_in_str(text))))
 
 
-def apply_modules_to_pd_series(pd_series):
+def apply_modules_to_pd_series(pd_series, apply_filepath_placeholder=False):
     """
     Apply all modules to pd Series.
     :param pd_series: pandas Series
+    :param apply_filepath_placeholder: Flag indicating if we want to apply the filepath placeholder
     :return: Series with placeholders
     """
-    pd_series = pd_series.apply(lambda x: apply_modules_to_str(x))
+    pd_series = pd_series.apply(lambda x: apply_modules_to_str(x, apply_filepath_placeholder))
     return pd_series
 
 
-def apply_modules_to_df(df, column):
+def apply_modules_to_df(df, column, apply_filepath_placeholder=False):
     """
     Apply all modules to df column.
     :param df: pandas DataFrame
     :param column: column to apply the operation on
+    :param apply_filepath_placeholder: Flag indicating if we want to apply the filepath placeholder
     :return: dataframe with placeholders
     """
-    df[column] = apply_modules_to_pd_series(df[column])
+    df[column] = apply_modules_to_pd_series(df[column], apply_filepath_placeholder)
     return df
 
 
 def process_dataframe(data: pd.DataFrame, column: str, n_lines, percentage, from_end: bool,
-                      randomize: bool, apply_placeholder: bool):
+                      randomize: bool, apply_placeholder: bool, apply_filepath_placeholder: bool = False):
     data[column] = data[column].astype(str)
     if n_lines:
         n_lines = int(n_lines)
@@ -81,6 +95,6 @@ def process_dataframe(data: pd.DataFrame, column: str, n_lines, percentage, from
 
     if apply_placeholder:
         print("Applying placeholder transformation...")
-        data = apply_modules_to_df(data, column)
+        data = apply_modules_to_df(data, column, apply_filepath_placeholder)
 
     return data
