@@ -1,7 +1,6 @@
 import argparse
 
 from anomark.model_handler import MarkovModelHandler as mmh
-from anomark.utils.data_handler import process_dataframe
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -20,9 +19,12 @@ if __name__ == "__main__":
                         help="Color the least likely letters in the output, according to the model")
     parser.add_argument("-n", "--nLines", default=50, required=False, help="The number of lines you want to display")
     parser.add_argument("--silent", required=False, action="store_true", help="Silent mode")
-    parser.add_argument("--placeholder", required=False, action="store_true",
-                        help="Apply GUID, SID, and username replacement by placeholder. See documentation for more "
+    parser.add_argument("--placeholder", action="store_true", required=False,
+                        help="Apply GUID, SID, username, and hash replacement by placeholder. See documentation for more "
                              "details about how it is performed")
+    parser.add_argument("--filepath-placeholder", action="store_true", required=False,
+                        help="Apply filepath replacement by placeholder. See documentation for more "
+                             "details about how it is performed. This is a separate because you may want other placeholders applied but not this one.")
     parser.add_argument("--show-percentage", required=False, action="store_true",
                         help="Add human-readable percentage to reflect proximity of Markov score to threshold where threshold is the expected value.")
 
