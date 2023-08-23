@@ -43,7 +43,7 @@ class MarkovModelHandler:
                 result_grouped = MarkovModelHandler.add_color_column(result_grouped, model, threshold, col_name)
 
             if show_percentage:
-                result_grouped = MarkovModelHandler.add_percentage_column(result_grouped, threshold, MARKOV_SCORE)
+                result_grouped = MarkovModelHandler.add_percentage_column(result_grouped, model.prior, MARKOV_SCORE)
 
             MarkovModelHandler.save_execution_results(result_grouped, output)
 
@@ -142,11 +142,11 @@ class MarkovModelHandler:
         return df
 
     @staticmethod
-    def add_percentage_column(df: pd.DataFrame, threshold: float, col_name):
+    def add_percentage_column(df: pd.DataFrame, prior: float, col_name):
         print("Adding percentage column")
         # Adding a column with percentage in results
         df["Percentage"] = df[col_name] \
-            .progress_apply(lambda x: str(round((1 - (x / threshold)) * 100, 2)) + "%")
+            .progress_apply(lambda x: str(round(x / np.log(prior) * 100, 2)) + "%")
         return df
 
     @staticmethod
