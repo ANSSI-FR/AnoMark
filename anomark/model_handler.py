@@ -130,7 +130,7 @@ class MarkovModelHandler:
             if show_percentage:
                 # Human-readable percentage to reflect proximity of Markov score to threshold where threshold is the
                 # "expected" value.
-                print(str(round((1 - (scores[item] / threshold)) * 100, 2)) + "%")
+                print(str(round(scores[item] / np.log(model.prior) * 100, 2)) + "%")
         print('_______')
 
     @staticmethod
