@@ -37,7 +37,7 @@ setup(
     ),
     install_requires=[
         "certifi==2021.10.8",
-        "numpy==1.25.1",
+        "numpy==1.26.3",
         "pandas==1.4.2",
         "python-dateutil==2.8.2",
         "pytz==2022.1",
