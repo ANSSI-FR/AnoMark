@@ -116,12 +116,11 @@ class MarkovModelHandler:
     def display_top(df: pd.DataFrame, model: MarkovModel, col_name, threshold, nb_lines, color, show_percentage):
         print('_______')
         print("Displaying top {}".format(nb_lines))
-        df_slice_map = df[[col_name, MARKOV_SCORE]][:nb_lines].to_dict()
-        commands = df_slice_map[col_name]
-        scores = df_slice_map[MARKOV_SCORE]
+        df_slice = df.sort_values(MARKOV_SCORE)[:nb_lines]
 
-        for item, elt in commands.items():
+        for ind in df_slice.index:
             print('_______')
+            elt = df_slice.loc[ind, col_name]
             if color:
                 print(MarkovModelHandler.colored_results(elt, model, threshold))
             else:
@@ -130,7 +129,8 @@ class MarkovModelHandler:
             if show_percentage:
                 # Human-readable percentage to reflect proximity of Markov score to threshold where threshold is the
                 # "expected" value.
-                print(str(round(scores[item] / np.log(model.prior) * 100, 2)) + "%")
+                score = df_slice.loc[ind, MARKOV_SCORE]
+                print(str(round(score / np.log(model.prior) * 100, 2)) + "%")
         print('_______')
 
     @staticmethod
